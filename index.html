@@ -570,7 +570,6 @@
                 <div class="ftab active" onclick="sortBy('total',this)">Total</div>
                 <div class="ftab" onclick="sortBy('centro_vida',this)">Centro Vida</div>
                 <div class="ftab" onclick="sortBy('familias_cuidadoras',this)">Familias Cuid.</div>
-                <div class="ftab" onclick="sortBy('con_discapacidad',this)">Discapacidad</div>
             </div>
             <div class="search-wrap">
                 <input id="search" type="text" placeholder="Buscar comuna…" oninput="filterList()">
@@ -612,12 +611,6 @@
                     <div class="dp-bar-label"><span>Hombres</span><span id="dp-hom-n"></span></div>
                     <div class="dp-bar-track">
                         <div class="dp-bar-fill" id="dp-hom-bar" style="background:var(--accent)"></div>
-                    </div>
-                </div>
-                <div class="dp-bar-row" style="margin-top:7px">
-                    <div class="dp-bar-label"><span>Con discapacidad</span><span id="dp-disc-n"></span></div>
-                    <div class="dp-bar-track">
-                        <div class="dp-bar-fill" id="dp-disc-bar" style="background:var(--accent4)"></div>
                     </div>
                 </div>
             </div>
@@ -712,7 +705,6 @@
                 let servicio = filaLimpia["BIEN, PRODUCTO, SERVICIO RECIBIDO"] || "";
                 let edad = parseInt(filaLimpia["AÑOS CUMPLIDOS AL INGRESO DEL PROGRAMA"]) || 0;
                 let sexo = filaLimpia["* SEXO"] || "";
-                let discapacidad = filaLimpia["* CONDICIÓN DE DISCAPACIDAD"] || "";
 
                 if (!comunaOriginalStr) return;
 
@@ -733,7 +725,6 @@
                         familias_cuidadoras: 0,
                         mujeres: 0,
                         hombres: 0,
-                        con_discapacidad: 0,
                         edadesSuma: 0,
                         edadesConteo: 0,
                         edad_promedio: 0
@@ -761,10 +752,6 @@
                 if (sexo.toUpperCase().trim() === "MUJER") c.mujeres++;
                 if (sexo.toUpperCase().trim() === "HOMBRE") c.hombres++;
 
-                // Vulnerabilidad: Discapacidad
-                if (discapacidad && discapacidad.toUpperCase().trim() !== "NINGUNA" && discapacidad.toUpperCase().trim() !== "NINGUNO") {
-                    c.con_discapacidad++;
-                }
 
                 // Edad Promedio
                 if (edad > 0) {
@@ -890,7 +877,7 @@
       <div class="commune-dot" style="background:${getColor(d.total)}"></div>
       <div class="commune-info">
         <div class="commune-name">${d.nameStr}</div>
-        <div class="commune-sub">C.V: ${d.centro_vida} · F.C: ${d.familias_cuidadoras} · Disc: ${d.con_discapacidad}</div>
+        <div class="commune-sub">Centro Vida: ${d.centro_vida} · Familias Cuid.: ${d.familias_cuidadoras}</div>
       </div>
       <div class="commune-count">${d[sortKey]}</div>
     `;
@@ -932,16 +919,13 @@
 
             let pctMuj = d.total > 0 ? Math.round((d.mujeres / d.total) * 100) : 0;
             let pctHom = d.total > 0 ? Math.round((d.hombres / d.total) * 100) : 0;
-            let pctDisc = d.total > 0 ? Math.round((d.con_discapacidad / d.total) * 100) : 0;
 
             document.getElementById('dp-muj-n').textContent = `${d.mujeres} (${pctMuj}%)`;
             document.getElementById('dp-hom-n').textContent = `${d.hombres} (${pctHom}%)`;
-            document.getElementById('dp-disc-n').textContent = `${d.con_discapacidad} (${pctDisc}%)`;
 
             setTimeout(() => {
                 document.getElementById('dp-muj-bar').style.width = pctMuj + '%';
                 document.getElementById('dp-hom-bar').style.width = pctHom + '%';
-                document.getElementById('dp-disc-bar').style.width = pctDisc + '%';
             }, 50);
 
             document.getElementById('detailPanel').classList.add('visible');
