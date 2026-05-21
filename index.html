@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Georeferenciación — Adultos Mayores Medellín · Proyecto 250071</title>
+    <title>Georeferenciación — Personas Mayores Medellín · Proyecto 250071</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
@@ -98,11 +98,13 @@
             gap: 8px;
             overflow-x: auto;
             padding-bottom: 2px;
-            scrollbar-width: none; /* Ocultar en Firefox */
+            scrollbar-width: none;
+            /* Ocultar en Firefox */
         }
 
         .header-pills::-webkit-scrollbar {
-            display: none; /* Ocultar en Chrome/Safari */
+            display: none;
+            /* Ocultar en Chrome/Safari */
         }
 
         .pill {
@@ -507,14 +509,17 @@
             }
 
             .main {
-                flex-direction: column-reverse; /* Mandar la lista abajo del mapa para mejor UX */
-                height: calc(100vh - 105px); /* Ajuste dinámico según cabecera móvil */
+                flex-direction: column-reverse;
+                /* Mandar la lista abajo del mapa para mejor UX */
+                height: calc(100vh - 105px);
+                /* Ajuste dinámico según cabecera móvil */
                 overflow: visible;
             }
 
             .sidebar {
                 width: 100%;
-                height: 50%; /* Comparte espacio equitativo con el mapa */
+                height: 50%;
+                /* Comparte espacio equitativo con el mapa */
                 border-right: none;
                 border-top: 1px solid var(--border);
             }
@@ -528,7 +533,8 @@
                 width: calc(100% - 28px);
                 right: 14px;
                 top: 14px;
-                max-height: calc(50% - 28px); /* Evita que pise los controles inferiores */
+                max-height: calc(50% - 28px);
+                /* Evita que pise los controles inferiores */
             }
 
             .legend {
@@ -541,7 +547,8 @@
 
         @media (max-width: 480px) {
             .legend {
-                display: none; /* Ocultar leyenda en pantallas súper críticas para liberar espacio del mapa */
+                display: none;
+                /* Ocultar leyenda en pantallas súper críticas para liberar espacio del mapa */
             }
         }
     </style>
@@ -552,7 +559,7 @@
     <header>
         <div class="logo-mark">🗺️</div>
         <div class="header-text">
-            <h1 id="header-main-title">Adultos Mayores — Medellín</h1>
+            <h1 id="header-main-title">Personas Mayores — Amautta</h1>
             <p id="header-sub-title">Proyecto 250071 · Georeferenciación de precisión por comunas</p>
         </div>
         <div class="header-pills">
@@ -813,9 +820,19 @@
                         let nombreCompleto = datosAsociados ? datosAsociados.nameStr : ("Comuna " + numComunaGeo + " (Sin registros)");
                         let totalPersonas = datosAsociados ? datosAsociados.total : 0;
 
+                        // Extraemos los valores específicos por programa (si no existen datos, por defecto es 0)
+                        let centroVida = datosAsociados ? datosAsociados.centro_vida : 0;
+                        let familiasCuidadoras = datosAsociados ? datosAsociados.familias_cuidadoras : 0;
+
                         layersMap[numComunaGeo] = layer;
 
-                        layer.bindTooltip(`<strong>${nombreCompleto}</strong><br>👥 ${totalPersonas} personas registradas`, { sticky: true });
+                        // Agregamos el desglose al tooltip flotante usando saltos de línea (<br>)
+                        layer.bindTooltip(`
+        <strong>${nombreCompleto}</strong><br>
+        👥 ${totalPersonas} personas beneficiadas<br>
+        <span style="color: #38bdf8;"> Centro Vida: ${centroVida}</span><br>
+        <span style="color: #c084fc;"> Cuidadoras: ${familiasCuidadoras}</span>
+    `, { sticky: true });
 
                         layer.on({
                             click: function () {
