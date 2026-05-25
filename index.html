@@ -625,19 +625,16 @@
             <div class="legend">
                 <div class="legend-title">Personas por comuna</div>
                 <div class="legend-item">
-                    <div class="legend-swatch" style="background:#7a1c1c"></div> &gt; 200 personas
+                    <div class="legend-swatch" style="background:#00b050"></div> Alta Concentración (&gt; 200 personas)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-swatch" style="background:#b82525"></div> 121–200 personas
+                    <div class="legend-swatch" style="background:#87af31"></div> Concentración Significativa (121–200 personas)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-swatch" style="background:#dd513a"></div> 61–120 personas
+                    <div class="legend-swatch" style="background:#ff9900"></div> Concentración Media (61–120 personas)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-swatch" style="background:#f4905a"></div> 21–60 personas
-                </div>
-                <div class="legend-item">
-                    <div class="legend-swatch" style="background:#fde68a"></div> 1–20 personas
+                    <div class="legend-swatch" style="background:#cc0000"></div> Muy Baja Concentración (21–60 personas)
                 </div>
             </div>
         </div>
@@ -656,12 +653,13 @@
         let globalPills = { total: 0, comunas: 0, cv: 0, fc: 0 };
 
         // Escala coroplética para los polígonos de Medellín
+        // Escala Matriz de Riesgo Invertida: Verde (Mucha gente) -> Rojo (Poca gente)
         function getColor(n) {
-            return n > 200 ? '#7a1c1c' :
-                n > 120 ? '#b82525' :
-                    n > 60 ? '#dd513a' :
-                        n > 20 ? '#f4905a' :
-                            n > 0 ? '#fde68a' : '#21262d'; // Si está en 0, se pinta del color de la superficie oscura
+            return n > 200 ? '#00b050' : // Verde Oscuro / Bosque (Máxima concentración / > 200)
+                n > 120 ? '#87af31' :    // Verde claro / Oliva (Alta concentración)
+                    n > 60 ? '#ff9900' :  // Naranja Oscuro (Concentración media)
+                        n > 20 ? '#cc0000' :  // Amarillo Puro (Baja concentración)
+                            n > 0 ? '#21262d' : '#000000'; // Rojo Fuerte (Mínima concentración / 1-20). 0 se queda oscuro.
         }
 
         // ─── INITIALIZE MAP ──────────────────────────────────────────────────────
